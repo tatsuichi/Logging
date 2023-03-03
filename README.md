@@ -22,3 +22,6 @@
 | .NET framework | コンソールアプリ（.NET Framework）| .NET Framework 4.8 | ConsoleAppNetFramework |
 | ASP.NET Core | ASP.NET Core Web API | .NET 7.0 | WebApplication |
 | .NET Core Console application | コンソールアプリ | .NET 7.0 | ConsoleAppDotNet |
+
+# 注意点
+NLog.configのプロパティで「出力ディレクトリにコピー」の設定項目を「常にコピーする」または「新しい場合はコピーする」にすること。デフォルトの「コピーしない」ではloggerがconfigを見つけられずログ出力されません。
