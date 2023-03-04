@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
@@ -12,6 +13,11 @@ namespace ConsoleAppDotNet
             var logger = LogManager.GetCurrentClassLogger();
             try
             {
+                var config = new ConfigurationBuilder()
+                   .SetBasePath(System.IO.Directory.GetCurrentDirectory()) //From NuGet Package Microsoft.Extensions.Configuration.Json
+                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                   .Build();
+
                 using var servicesProvider = new ServiceCollection()
                     .AddTransient<Runner>() // Runner is the custom class
                     .AddLogging(loggingBuilder =>
@@ -19,7 +25,7 @@ namespace ConsoleAppDotNet
                         // configure Logging with NLog
                         loggingBuilder.ClearProviders();
                         loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                        loggingBuilder.AddNLog();
+                        loggingBuilder.AddNLog(config);
                     }).BuildServiceProvider();
 
                 var runner = servicesProvider.GetRequiredService<Runner>();
